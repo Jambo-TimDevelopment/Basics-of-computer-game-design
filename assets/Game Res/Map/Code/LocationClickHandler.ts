@@ -13,6 +13,7 @@ export class LocationClickHandler extends Component {
         TurtleBtn: 'scene',
         TransportBtn: 'transport',
         EventsBtn: 'eventRandomChoice',
+        MapBtn: 'map',
     };
 
     start() {
