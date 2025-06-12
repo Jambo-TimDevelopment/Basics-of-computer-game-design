@@ -5,7 +5,7 @@ const { ccclass, property } = _decorator;
 export class LocationClickHandler extends Component {
     // Карта соответствия имени ноды и сцены
     private locationSceneMap: Record<string, string> = {
-        "IcelandsBtn": "ice-lands",
+        "IceLandsBtn": "ice-lands",
         "SwampsBtn": "swamps",
         "TropicalLandsBtn": "tropical-lands",
         "UnderWaterLandsBtn": "underwater-lands",
@@ -18,7 +18,6 @@ export class LocationClickHandler extends Component {
     onLocationClick() {
         const nodeName = this.node.name; // Получаем имя текущей ноды (например, "IcelandsBtn")
         const targetScene = this.locationSceneMap[nodeName]; // Находим соответствующую сцену
-
         if (targetScene) {
             director.loadScene(targetScene);
         } else {
