@@ -5,10 +5,14 @@ const { ccclass, property } = _decorator;
 export class LocationClickHandler extends Component {
     // Карта соответствия имени ноды и сцены
     private locationSceneMap: Record<string, string> = {
-        "IceLandsBtn": "ice-lands",
-        "SwampsBtn": "swamps",
-        "TropicalLandsBtn": "tropical-lands",
-        "UnderWaterLandsBtn": "underwater-lands",
+        IceLandsBtn: 'ice-lands',
+        SwampsBtn: 'swamps',
+        TropicalLandsBtn: 'tropical-lands',
+        UnderWaterLandsBtn: 'underwater-lands',
+        BaseBtn: 'scene',
+        TurtleBtn: 'scene',
+        TransportBtn: 'transport',
+        EventsBtn: 'eventRandomChoice',
     };
 
     start() {
