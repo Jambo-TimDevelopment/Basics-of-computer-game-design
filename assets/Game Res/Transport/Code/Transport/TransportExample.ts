@@ -1,16 +1,20 @@
 import { _decorator, Component, Node } from 'cc';
+import { TransportManager } from './TransportManager';
+import { TransportType, IslandResource, ResourceType, IslandLevel } from './TransportTypes';
 const { ccclass, property } = _decorator;
 
 @ccclass('TransportExample')
 export class TransportExample extends Component {
+
+    @property({ type: TransportManager })
+    private transportManager: TransportManager | null = null;
+
     start() {
         // Пример работы с системой
 
-        // Получаем менеджер транспорта
-        const transportManager = this.node.getComponent(TransportManager);
 
         // Переключаемся на дельфина
-        if (transportManager.switchTransport(TransportType.DOLPHIN)) {
+        if (this.transportManager.switchTransport(TransportType.DOLPHIN)) {
             console.log("Now use dolphin");
         }
 
@@ -23,16 +27,16 @@ export class TransportExample extends Component {
             levelRequirement: IslandLevel.LEVEL_1
         };
 
-        if (transportManager.loadResource(resource, 10)) {
+        if (this.transportManager.loadResource(resource, 10)) {
             console.log("Load 10 woods");
         }
 
         // Доставляем ресурсы и получаем прибыль
-        const profit = transportManager.deliverResources();
+        const profit = this.transportManager.deliverResources();
         console.log(`Earned: $${profit}`);
 
         // Улучшаем остров
-        if (transportManager.upgradeIsland()) {
+        if (this.transportManager.upgradeIsland()) {
             console.log("Island upgraded!");
         }
     }

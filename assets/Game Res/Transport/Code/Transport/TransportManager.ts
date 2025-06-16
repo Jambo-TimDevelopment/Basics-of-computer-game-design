@@ -1,5 +1,6 @@
 import { _decorator, Component } from 'cc';
-import { Transport, TransportType, IslandLevel, IslandResource } from './TransportTypes';
+import { TransportType, IslandLevel } from './TransportTypes';
+import { Transport } from './Transport';  // явный импорт класса Transport
 
 const { ccclass, property } = _decorator;
 

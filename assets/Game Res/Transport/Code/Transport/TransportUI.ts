@@ -1,5 +1,6 @@
 import { _decorator, Component, Label, ProgressBar, Button } from 'cc';
-import { TransportManager, TransportType } from './TransportManager';
+import { TransportManager } from './TransportManager';
+import { TransportType } from './TransportTypes'; 
 
 const { ccclass, property } = _decorator;
 
@@ -26,11 +27,10 @@ export class TransportUI extends Component {
     @property({ type: Button })
     public anglerUnlockButton: Button | null = null;
 
+    @property({ type: TransportManager })
     private transportManager: TransportManager | null = null;
 
     protected onLoad(): void {
-        this.transportManager = this.node.getComponent(TransportManager) ||
-            this.node.scene.getComponentInChildren(TransportManager);
 
         if (!this.transportManager) {
             console.error('TransportManager not found!');
@@ -66,7 +66,7 @@ export class TransportUI extends Component {
 
         // Обновляем уровень острова
         if (this.islandLevelLabel) {
-            this.islandLevelLabel.string = `Уровень острова: ${this.transportManager.getIslandLevel()}`;
+            this.islandLevelLabel.string = `Island level: ${this.transportManager.getIslandLevel()}`;
         }
 
         // Обновляем кнопки разблокировки
@@ -75,10 +75,10 @@ export class TransportUI extends Component {
 
     private getTransportName(type: TransportType): string {
         switch (type) {
-            case TransportType.TURTLE: return 'Черепаха';
-            case TransportType.DOLPHIN: return 'Дельфин';
-            case TransportType.ANGLER: return 'Удильщик';
-            default: return 'Неизвестно';
+            case TransportType.TURTLE: return 'Turtle';
+            case TransportType.DOLPHIN: return 'Dolphin';
+            case TransportType.ANGLER: return 'Angler';
+            default: return 'Undefined';
         }
     }
 
