@@ -51,7 +51,7 @@
         "rawWidth": 393,
         "rawHeight": 767,
         "borderTop": 0,
-        "borderBottom": 0,
+        "borderBottom": 35,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,

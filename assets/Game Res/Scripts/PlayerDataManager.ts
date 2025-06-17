@@ -19,9 +19,17 @@ export const EVENT_LEVEL_UPDATED = "level-updated";
 export class PlayerDataManager extends Component {
   private data: PlayerData = null;
 
+  public static instance: PlayerDataManager = null;
+
   onLoad() {
-    // Делаем этот узел постоянным, чтобы он не удалялся при смене сцен
-    director.addPersistRootNode(this.node);
+    if (PlayerDataManager.instance === null) {
+      PlayerDataManager.instance = this;
+      director.addPersistRootNode(this.node);
+    } else {
+      // Если экземпляр уже существует, уничтожаем этот дубликат
+      this.node.destroy();
+      return;
+    } // Делаем этот узел постоянным, чтобы он не удалялся при смене сцен
     this.load();
   }
 
@@ -92,7 +100,11 @@ export class PlayerDataManager extends Component {
         balance: 1000,
         level: 1,
       };
+
       this.save();
+      director.emit(EVENT_LEVEL_UPDATED);
+      director.emit(EVENT_BALANCE_UPDATED);
+      director.emit(EVENT_NICKNAME_UPDATED);
     }
   }
 

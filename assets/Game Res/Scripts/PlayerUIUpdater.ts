@@ -1,8 +1,9 @@
-import { _decorator, Component, Node, Label, director } from "cc";
+import { _decorator, Component, Node, Label, director, log } from "cc";
 import {
   EVENT_BALANCE_UPDATED,
   EVENT_LEVEL_UPDATED,
   EVENT_NICKNAME_UPDATED,
+  PlayerDataManager,
 } from "./PlayerDataManager"; // Импортируем имена событий
 const { ccclass, property } = _decorator;
 
@@ -25,6 +26,7 @@ export class PlayerUIUpdater extends Component {
 
     // Также можно запросить начальные данные здесь, если нужно
     // Но лучше это делать из самого PlayerDataManager, который их устанавливает
+    this.initializeUI();
   }
 
   onDisable() {
@@ -40,6 +42,7 @@ export class PlayerUIUpdater extends Component {
   private updateBalance(newBalance: number) {
     if (this.balanceLabel) {
       this.balanceLabel.string = newBalance.toString();
+      console.log("update Balance", newBalance);
     }
   }
 
@@ -56,6 +59,14 @@ export class PlayerUIUpdater extends Component {
   private updateLevel(newLevel: number) {
     if (this.levelLabel) {
       this.levelLabel.string = `LVL. ${newLevel}`;
+    }
+  }
+
+  private initializeUI() {
+    // Проверяем, что PlayerDataManager уже загружен
+    if (PlayerDataManager.instance) {
+      this.updateBalance(PlayerDataManager.instance.getBalance());
+      this.updateNickname(PlayerDataManager.instance.getNickname());
     }
   }
 }
