@@ -67,6 +67,7 @@ export class PlayerUIUpdater extends Component {
     if (PlayerDataManager.instance) {
       this.updateBalance(PlayerDataManager.instance.getBalance());
       this.updateNickname(PlayerDataManager.instance.getNickname());
+      this.updateLevel(PlayerDataManager.instance.getLevel());
     }
   }
 }

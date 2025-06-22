@@ -8,7 +8,7 @@ export interface PlayerData {
 }
 
 // Ключ для хранения в localStorage
-const STORAGE_KEY = "playerData";
+const USER_DATA_STORAGE_KEY = "playerData";
 
 // Имена событий, которые мы будем рассылать
 export const EVENT_BALANCE_UPDATED = "balance-updated";
@@ -88,7 +88,7 @@ export class PlayerDataManager extends Component {
   // --- Загрузка и сохранение ---
 
   private load() {
-    const dataString = sys.localStorage.getItem(STORAGE_KEY);
+    const dataString = sys.localStorage.getItem(USER_DATA_STORAGE_KEY);
     if (dataString) {
       this.data = JSON.parse(dataString);
       console.log("Данные игрока загружены:", this.data);
@@ -102,13 +102,13 @@ export class PlayerDataManager extends Component {
       };
 
       this.save();
-      director.emit(EVENT_LEVEL_UPDATED);
-      director.emit(EVENT_BALANCE_UPDATED);
-      director.emit(EVENT_NICKNAME_UPDATED);
+      director.emit(EVENT_LEVEL_UPDATED, this.data.level);
+      director.emit(EVENT_BALANCE_UPDATED, this.data.balance);
+      director.emit(EVENT_NICKNAME_UPDATED, this.data.nickname);
     }
   }
 
   private save() {
-    sys.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+    sys.localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(this.data));
   }
 }
