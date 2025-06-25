@@ -15,6 +15,7 @@ export interface ItemData {
   count: number;
   itemName: string;
   icon: string;
+  price?: number; // Optional field to store the purchase price
 }
 
 @ccclass("ItemController")

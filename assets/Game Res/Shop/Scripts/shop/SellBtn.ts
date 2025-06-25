@@ -1,0 +1,152 @@
+import {_decorator, Component, Node, Sprite, SpriteFrame, resources, error, assetManager, Label, Color, sys} from 'cc';
+import { ScrollableShop, ShopMode } from './ScrollableShop';
+import { GridManager } from '../../../Scripts/GridManager';
+import { ItemData } from '../../../Scripts/ItemController';
+
+const {ccclass, property} = _decorator;
+
+@ccclass('SellBtn')
+export class SellBtn extends Component {
+    start() {
+
+    }
+
+    update(deltaTime: number) {
+
+    }
+
+    onButtonClick() {
+        this.setActive();
+        this.setNeighbourInactive();
+        this.setFontCurrent();
+        this.setFontNeighbour();
+        this.showShop();
+        this.hideUpgrade();
+        this.updateShopWithInventoryItems();
+    }
+
+    private updateShopWithInventoryItems() {
+        // Get the ScrollableShop component
+        const scrollableShopNode = this.node.parent.children.find(child => child.name === 'ScrollableShop');
+        if (!scrollableShopNode) {
+            console.error('ScrollableShop node not found');
+            return;
+        }
+
+        const scrollableShop = scrollableShopNode.getComponent(ScrollableShop);
+        if (!scrollableShop) {
+            console.error('ScrollableShop component not found');
+            return;
+        }
+
+        // Set shop mode to SELL
+        scrollableShop.setMode(ShopMode.SELL);
+
+        // Get inventory items from GridManager
+        const USER_DATA_KEY = "userData";
+        const dataString = sys.localStorage.getItem(USER_DATA_KEY);
+        if (!dataString) {
+            console.error('No inventory data found');
+            return;
+        }
+
+        try {
+            const inventoryItems: ItemData[] = JSON.parse(dataString);
+
+            // Convert inventory items to shop items
+            const shopItems = inventoryItems.map(item => {
+                return {
+                    id: item.id.toString(),
+                    name: item.itemName,
+                    price: this.getPriceForItem(item.itemName, item),
+                    description: `${item.itemName} (${item.count} available)`
+                };
+            });
+
+            // Update the shop with inventory items
+            scrollableShop.setItems(shopItems);
+
+        } catch (e) {
+            console.error('Failed to parse inventory data:', e);
+        }
+    }
+
+    private getPriceForItem(itemName: string, inventoryItem?: ItemData): number {
+        // If we have inventory item data with a purchase price, return 90% of the purchase price
+        if (inventoryItem && inventoryItem.price !== undefined) {
+            const sellPrice = inventoryItem.price; // 90% of purchase price
+            console.log(`Selling ${itemName} for ${sellPrice} (${inventoryItem.price})`);
+            return sellPrice;
+        }
+
+        // Default items with hardcoded prices
+        const defaultItems = {
+            'Меч': 100,
+            'Щит': 80,
+            'Зелье': 30,
+            'Лук': 120,
+            'Ключ': 50
+        };
+
+        // Check if it's a default item
+        if (itemName in defaultItems) {
+            return defaultItems[itemName];
+        }
+
+        // For non-default items, generate a random price between 1 and 10000
+        return Math.floor(Math.random() * 10000) + 1;
+    }
+
+    private setFontNeighbour() {
+        this.node.parent.children.filter(child => child.name == 'btn-buy' || child.name == 'btn-upgrade').forEach(child => {
+            child.children.find(c => c.name == child.name.split('-')[1]).getComponent(Label).color = new Color("203D7E")
+        });
+    }
+
+    private setFontCurrent() {
+        this.node.children.find(child => child.name == 'sell').getComponent(Label).color = new Color("FFFFFF");
+    }
+
+    private setActive() {
+        const uuidActive = "e65ba532-6c96-48c7-84ab-b87537bb3907@f9941";
+
+        assetManager.loadAny({uuid: uuidActive}, (err, asset) => {
+            if (err) {
+                error(`Failed to load asset by UUID: ${uuidActive}`, err);
+                return;
+            }
+
+            const sprite = this.node.getComponent(Sprite);
+            if (sprite) {
+                sprite.spriteFrame = asset;
+            }
+        })
+    }
+
+    private setNeighbourInactive() {
+        const uuidInactive = "c74ce59d-1c73-41ee-af7f-65da34b2f0fb@f9941"
+
+        assetManager.loadAny({uuid: uuidInactive}, (err, asset) => {
+            if (err) {
+                error(`Failed to load asset by UUID: ${uuidInactive}`, err);
+                return;
+            }
+
+            this.node.parent.children.filter(child => child.name == 'btn-buy' || child.name == 'btn-upgrade')
+                .forEach(child => {
+                    const sprite = child.getComponent(Sprite)
+                    if (sprite) {
+                        sprite.spriteFrame = asset;
+                    }
+                });
+        })
+    }
+
+    private showShop() {
+        this.node.parent.children.find(child => child.name == 'ScrollableShop').active = true;
+    }
+
+    private hideUpgrade() {
+        this.node.parent.parent.parent.children.find(child => child.name == 'ShopUpgrade').active = false;
+    }
+}
