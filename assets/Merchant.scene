@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.SceneAsset",
-    "_name": "base_merchant_house",
+    "_name": "Merchant",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
