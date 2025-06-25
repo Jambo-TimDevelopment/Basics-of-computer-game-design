@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Node, sys } from 'cc';
+import { _decorator, Component, director, Node, sys } from "cc";
 const { ccclass } = _decorator;
 
 export interface ShopData {
@@ -27,7 +27,7 @@ export const SHOP_LEVELS: Map<number, ShopLvl> = new Map([
   [5, { lvl: 5, capacity: 24, upgradePrice: 10000, bonus: 20 }],
 ]);
 
-@ccclass('ShopLvlManager')
+@ccclass("ShopLvlManager")
 export class ShopLvlManager extends Component {
   private data: ShopData = null;
 
@@ -40,7 +40,6 @@ export class ShopLvlManager extends Component {
     } else {
       // If instance already exists, destroy this duplicate
       this.node.destroy();
-      return;
     }
     // Make this node persistent so it doesn't get destroyed when changing scenes
     this.load();
